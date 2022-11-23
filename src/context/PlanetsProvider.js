@@ -4,17 +4,20 @@ import apiPlanets from '../services/api';
 
 export default function PlanetsProvider({ children }) {
   const [data, setData] = useState([]);
+  const [filters, setFilters] = useState({});
 
   useEffect(() => {
     apiPlanets().then((result) => setData(result));
   }, []);
 
-  const value = useMemo(() => ({
+  const values = useMemo(() => ({
     data,
-  }), [data]);
+    filters,
+    setFilters,
+  }), [data, filters, setFilters]);
 
   return (
-    <PlanetsContext.Provider value={ value }>
+    <PlanetsContext.Provider value={ values }>
       {children}
     </PlanetsContext.Provider>
   );

@@ -3,7 +3,9 @@ import Table from '../Component/Table';
 
 function MainPage() {
   return (
-    <Table />
+    <div>
+      <Table />
+    </div>
   );
 }
 
