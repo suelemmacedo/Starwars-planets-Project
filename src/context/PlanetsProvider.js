@@ -4,7 +4,12 @@ import apiPlanets from '../services/api';
 
 export default function PlanetsProvider({ children }) {
   const [data, setData] = useState([]);
-  const [filters, setFilters] = useState({});
+  const [searchName, setSearchName] = useState('');
+  const [filters, setFilters] = useState({
+    dropdown: '',
+    operador: '',
+    value: 0,
+  });
 
   useEffect(() => {
     apiPlanets().then((result) => setData(result));
@@ -12,9 +17,11 @@ export default function PlanetsProvider({ children }) {
 
   const values = useMemo(() => ({
     data,
+    searchName,
+    setSearchName,
     filters,
     setFilters,
-  }), [data, filters, setFilters]);
+  }), [data, searchName, filters]);
 
   return (
     <PlanetsContext.Provider value={ values }>
