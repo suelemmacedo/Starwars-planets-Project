@@ -5,9 +5,10 @@ import apiPlanets from '../services/api';
 export default function PlanetsProvider({ children }) {
   const [data, setData] = useState([]);
   const [searchName, setSearchName] = useState('');
+  const [selectedFilters, setSelectedFilters] = useState([]);
   const [filters, setFilters] = useState({
     dropdown: '',
-    operador: '',
+    operator: '',
     value: 0,
   });
 
@@ -21,7 +22,9 @@ export default function PlanetsProvider({ children }) {
     setSearchName,
     filters,
     setFilters,
-  }), [data, searchName, filters]);
+    selectedFilters,
+    setSelectedFilters,
+  }), [data, searchName, filters, selectedFilters, setSelectedFilters]);
 
   return (
     <PlanetsContext.Provider value={ values }>
