@@ -11,7 +11,6 @@ export default function Form() {
   };
 
   const handleChange2 = ({ target }) => {
-    /* console.log(name, value); */
     setFilters({
       ...filters,
       [target.name]: target.value,
@@ -27,6 +26,15 @@ export default function Form() {
     }]);
     setFilters({ ...filters, column: columnFilter[0] });
   };
+  const handleClick2 = (e) => {
+    setSelectedFilters(selectedFilters.filter((el) => el.column !== e.target.value));
+  };
+
+  // Requisito concluído com a ajuda de Ivan
+
+  const deletefilters = () => {
+    setSelectedFilters([]);
+  };
 
   return (
     <form>
@@ -40,7 +48,6 @@ export default function Form() {
       <select
         id="columnFilter"
         name="column"
-        /* value={ filters.column } */
         data-testid="column-filter"
         onChange={ handleChange2 }
       >
@@ -53,7 +60,6 @@ export default function Form() {
         ))}
       </select>
       <select
-        /* value={ filters.comparison } */
         id="comparison-filter"
         name="comparison"
         data-testid="comparison-filter"
@@ -77,19 +83,24 @@ export default function Form() {
       >
         Filtrar
       </button>
+      <button
+        type="button"
+        data-testid="button-remove-filters"
+        onClick={ deletefilters }
+      >
+        Remover todos
+      </button>
       {
         selectedFilters.map((filter, index) => (
           <div
             key={ index }
             className="selectedFilters"
+            data-testid="filter"
           >
             <button
               type="button"
-              onClick={ () => {
-                const cloneArray = [...selectedFilters];
-                cloneArray.splice(index, 1);
-                setSelectedFilters(cloneArray);
-              } }
+              value={ filter.column }
+              onClick={ handleClick2 }
             >
               𝙭
             </button>

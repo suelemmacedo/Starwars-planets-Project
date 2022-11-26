@@ -8,6 +8,7 @@ function Table() {
     const filterName = data.filter((element) => element
       .name.toLowerCase().includes(searchName.toLowerCase()));
 
+    // Requisito concluído com a ajuda de Ivan
     const filterByNameAndNumeric = filterName.filter((element) => {
       const result = selectedFilters.map(({ column, comparison, value }) => {
         switch (comparison) {
