@@ -2,19 +2,28 @@ import React, { useContext } from 'react';
 import PlanetsContext from '../context/PlanetsContext';
 
 function Table() {
-  const { data } = useContext(PlanetsContext);
-  const { searchName } = useContext(PlanetsContext);
-  const { selectedFilters } = useContext(PlanetsContext);
+  const { data, searchName, selectedFilters } = useContext(PlanetsContext);
 
-  const filterName = data.filter((element) => element
-    .name.toLowerCase().includes(searchName.toLowerCase()));
+  const filtersConditions = () => {
+    const filterName = data.filter((element) => element
+      .name.toLowerCase().includes(searchName.toLowerCase()));
 
-  const filters = (elem) => {
-    const bools = [];
-    selectedFilters.forEach((filter) => {
-      bools.push(Number(elem[filter.dropdown]) === Number(filter.value));
+    const filterByNameAndNumeric = filterName.filter((element) => {
+      const result = selectedFilters.map(({ column, comparison, value }) => {
+        switch (comparison) {
+        case 'menor que':
+          return +element[column] < +value;
+        case 'maior que':
+          return +element[column] > +value;
+        case 'igual a':
+          return +element[column] === +value;
+        default:
+          return true;
+        }
+      });
+      return result.every((el) => el);
     });
-    return bools.every((el) => el);
+    return filterByNameAndNumeric;
   };
 
   return (
@@ -25,7 +34,7 @@ function Table() {
           <th>Name</th>
           <th>Rotations Period</th>
           <th>Orbital Period</th>
-          <th>diameter</th>
+          <th>Diameter</th>
           <th>Climate</th>
           <th>Gravity</th>
           <th>Terrain</th>
@@ -39,8 +48,7 @@ function Table() {
       </thead>
       <tbody>
         {
-          filterName
-            .filter(filters)
+          filtersConditions()
             .map((element) => (
               <tr key={ element.name }>
                 <td>{element.name}</td>
@@ -56,7 +64,6 @@ function Table() {
                   <ul>
                     {element.films.map((el, index) => <li key={ index }>{el}</li>)}
                   </ul>
-
                 </td>
                 <td>{element.created}</td>
                 <td>{element.edited}</td>
@@ -66,8 +73,6 @@ function Table() {
         }
       </tbody>
     </table>
-
   );
 }
-
 export default Table;

@@ -2,21 +2,30 @@ import React, { useContext } from 'react';
 import PlanetsContext from '../context/PlanetsContext';
 
 export default function Form() {
-  const { setSearchName } = useContext(PlanetsContext);
-  const { filters, setFilters } = useContext(PlanetsContext);
-  const { selectedFilters, setSelectedFilters } = useContext(PlanetsContext);
+  const { setSearchName, filters,
+    setFilters, selectedFilters, setSelectedFilters,
+    columnFilter, setColumnFilter } = useContext(PlanetsContext);
 
   const handleChangeName = ({ target }) => {
     setSearchName(target.value);
   };
 
   const handleChange2 = ({ target }) => {
-    const { name, value } = target;
-    console.log(name, value);
+    /* console.log(name, value); */
     setFilters({
       ...filters,
-      [name]: value,
+      [target.name]: target.value,
     });
+  };
+
+  const handleClick = () => {
+    setColumnFilter(columnFilter.filter((el) => el !== filters.column));
+    setSelectedFilters([...selectedFilters, {
+      column: filters.column,
+      comparison: filters.comparison,
+      value: filters.value,
+    }]);
+    setFilters({ ...filters, column: columnFilter[0] });
   };
 
   return (
@@ -30,27 +39,29 @@ export default function Form() {
       <br />
       <select
         id="columnFilter"
-        name="dropdown"
-        value={ filters.dropdown }
+        name="column"
+        /* value={ filters.column } */
         data-testid="column-filter"
         onChange={ handleChange2 }
       >
-        <option value="population">Population</option>
-        <option value="orbital_period">Orbital Period</option>
-        <option value="diameter">Diameter</option>
-        <option value="rotation_period">Rotation Period</option>
-        <option value="surface_water">Surface Water</option>
+        {columnFilter.map((column, i) => (
+          <option
+            key={ i }
+          >
+            {column}
+          </option>
+        ))}
       </select>
       <select
-        value={ filters.operator }
+        /* value={ filters.comparison } */
         id="comparison-filter"
-        name="operator"
+        name="comparison"
         data-testid="comparison-filter"
         onChange={ handleChange2 }
       >
-        <option value="maior que">Maior que</option>
-        <option value="menor que">Menor que</option>
-        <option value="igual a">Igual a</option>
+        <option value="maior que">maior que</option>
+        <option value="menor que">menor que</option>
+        <option value="igual a">igual a</option>
       </select>
       <input
         type="number"
@@ -62,17 +73,7 @@ export default function Form() {
       <button
         type="button"
         data-testid="button-filter"
-        onClick={ () => {
-          setSelectedFilters((prevFilters) => ([
-            ...prevFilters,
-            filters,
-          ]));
-          setFilters({
-            dropdown: '',
-            operator: '',
-            value: 0,
-          });
-        } }
+        onClick={ handleClick }
       >
         Filtrar
       </button>
@@ -82,9 +83,19 @@ export default function Form() {
             key={ index }
             className="selectedFilters"
           >
+            <button
+              type="button"
+              onClick={ () => {
+                const cloneArray = [...selectedFilters];
+                cloneArray.splice(index, 1);
+                setSelectedFilters(cloneArray);
+              } }
+            >
+              𝙭
+            </button>
             <span>
-              {filter.dropdown}
-              {filter.operator}
+              {filter.column}
+              {filter.comparison}
               {filter.value}
             </span>
           </div>

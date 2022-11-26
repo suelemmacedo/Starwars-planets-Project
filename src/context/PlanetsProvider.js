@@ -6,9 +6,11 @@ export default function PlanetsProvider({ children }) {
   const [data, setData] = useState([]);
   const [searchName, setSearchName] = useState('');
   const [selectedFilters, setSelectedFilters] = useState([]);
+  const [columnFilter, setColumnFilter] = useState(['population',
+    'orbital_period', 'rotation_period', 'surface_water', 'diameter']);
   const [filters, setFilters] = useState({
-    dropdown: '',
-    operator: '',
+    column: 'population',
+    comparison: 'maior que',
     value: 0,
   });
 
@@ -24,7 +26,9 @@ export default function PlanetsProvider({ children }) {
     setFilters,
     selectedFilters,
     setSelectedFilters,
-  }), [data, searchName, filters, selectedFilters, setSelectedFilters]);
+    columnFilter,
+    setColumnFilter,
+  }), [data, searchName, filters, selectedFilters, columnFilter, setColumnFilter]);
 
   return (
     <PlanetsContext.Provider value={ values }>
@@ -32,5 +36,4 @@ export default function PlanetsProvider({ children }) {
     </PlanetsContext.Provider>
   );
 }
-
 PlanetsProvider.propTypes = {}.isRequired;
