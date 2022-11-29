@@ -88,7 +88,7 @@ export default function Form() {
         data-testid="button-remove-filters"
         onClick={ deletefilters }
       >
-        Remover todos
+        Remover todos os filtros
       </button>
       {
         selectedFilters.map((filter, index) => (

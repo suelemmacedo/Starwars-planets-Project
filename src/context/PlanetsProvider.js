@@ -28,7 +28,8 @@ export default function PlanetsProvider({ children }) {
     setSelectedFilters,
     columnFilter,
     setColumnFilter,
-  }), [data, searchName, filters, selectedFilters, columnFilter, setColumnFilter]);
+  }), [data, searchName, setSearchName, filters, setFilters, selectedFilters,
+    setSelectedFilters, columnFilter, setColumnFilter]);
 
   return (
     <PlanetsContext.Provider value={ values }>
